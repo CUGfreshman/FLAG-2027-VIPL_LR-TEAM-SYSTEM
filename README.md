@@ -58,6 +58,7 @@ flag2027-sixbranch/
 │   ├── cca/                         # parameters of the five CCA branches
 │   └── SHA256SUMS                   # checksums of the seven parameter files
 ├── data_lists/
+│   ├── triplet_training_rows.csv    # fixed MAV-Celeb English training pairs
 │   └── vox_selected.csv.gz          # fixed VoxCeleb2 selection
 ├── tests/                           # unit tests
 └── vendor/                          # included third-party source (FaceNet, WeSpeaker) with their licenses
@@ -193,7 +194,7 @@ Retrain the triplet branch, then refit the five CCA branches and the INLP of eve
 
 ### 3.1 Data
 
-**MAV-Celeb English training set.** It combines the 56 training identities of the official training set (MAV-Celeb V4, English) with the English subsets of the external V1 and V2 data: 5,004 rows from these 56 V4 identities and 5,786 and 12,186 rows from V1 and V2, for 198 identities and 22,976 original pairs in total. The official training set has 70 identities, split by identity 80/20 at random (seed 1); the other 14 identities are held out and are not used for any training or fitting. The datasets can be downloaded from: V1 and V2 at [mavceleb/mavceleb_baseline](https://github.com/mavceleb/mavceleb_baseline); V4 at the [FLAG_2027 repository](https://github.com/SwapnilKhandoker101/FLAG_2027#dataset). This repository does not distribute the raw media or the row-level manifest; to retrain with the original recipe, request the row-level manifest from the team and save it as `data/private/training_rows.csv.gz`. Set the dataset roots in `configs/data_roots.example.json`: the V2 root must be the directory above `v2/` (V2 keys already start with `v2/faces/` or `v2/voices/`); V1 and V4 keys start with `faces/` or `voices/`.
+**MAV-Celeb English training set.** It combines the 56 training identities of the official training set (MAV-Celeb V4, English) with the English subsets of the external V1 and V2 data: 5,004 rows from these 56 V4 identities and 5,786 and 12,186 rows from V1 and V2, for 198 identities and 22,976 original pairs in total. The official training set has 70 identities, split by identity 80/20 at random (seed 1); the other 14 identities are held out and are not used for any training or fitting. The identities and pairs in the V4 training subset are listed in [`triplet_training_rows.csv`](data_lists/triplet_training_rows.csv) in the rows with `source=v4`. The datasets can be downloaded from: V1 and V2 at [mavceleb/mavceleb_baseline](https://github.com/mavceleb/mavceleb_baseline); V4 at the [FLAG_2027 repository](https://github.com/SwapnilKhandoker101/FLAG_2027#dataset). Set the dataset roots in `configs/data_roots.example.json`: set the V1 and V2 roots to the directories containing `v1/` and `v2/`, respectively, and the V4 root to the directory containing `faces/` and `voices/`.
 
 **VoxCeleb2 selection.** The fixed selection list is included in the repository as `data_lists/vox_selected.csv.gz` (117,194 training rows and 2,000 held-out rows, 119,194 in total); the source media (the VoxCeleb2 development-set MP4 files) must be downloaded separately, as described below. The list was pre-filtered with the SpeechBrain VoxLingua107 language-identification model ([speechbrain/lang-id-voxlingua107-ecapa](https://huggingface.co/speechbrain/lang-id-voxlingua107-ecapa/tree/0253049ae131d6a4be1c4f0d8b0ff483a0f8c8e9), revision `0253049ae131d6a4be1c4f0d8b0ff483a0f8c8e9`), which removed utterances whose top-1 label is Bengali (`bn`) or Assamese (`as`).
 
@@ -207,7 +208,7 @@ Retrain the triplet branch, then refit the five CCA branches and the INLP of eve
 
 ```bash
 python scripts/build_media_manifest.py \
-  --rows data/private/training_rows.csv.gz \
+  --rows data_lists/triplet_training_rows.csv \
   --roots configs/data_roots.example.json --output data/english198.csv
 
 python scripts/extract_features.py \
