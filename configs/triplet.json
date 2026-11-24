@@ -1,0 +1,59 @@
+{
+  "name": "face_voice_triplet",
+  "checkpoint": "checkpoints/triplet/epoch0300.pth",
+  "own_inlp": "checkpoints/triplet/inlp198.npz",
+  "encoders_frozen": true,
+  "input_features": {
+    "face": [["face_peav_final", 1024], ["face_facenet", 512]],
+    "voice": [["voice_peav_final", 1024], ["voice_wespeaker", 256]],
+    "each_block_l2": true,
+    "concatenation_l2": false
+  },
+  "projection": {
+    "face_input_dim": 1536,
+    "voice_input_dim": 1280,
+    "output_dim": 256,
+    "layers": ["Linear", "BatchNorm1d", "ReLU", "Dropout", "L2"],
+    "dropout": 0.5,
+    "constructor": "original1024-per-side constructor, then face Linear1536 and voice Linear1280 replacements"
+  },
+  "training": {
+    "metadata_language": "English",
+    "sources": ["v1", "v2", "v4"],
+    "identities": 198,
+    "rows": 22976,
+    "unique_pairs": 22965,
+    "unique_faces": 22187,
+    "unique_audio": 21043,
+    "seed": 2,
+    "epochs": 300,
+    "updates_per_epoch": 179,
+    "total_updates": 53700,
+    "optimizer": "Adam",
+    "learning_rate": 1e-5,
+    "weight_decay": 0.01,
+    "betas": [0.9, 0.999],
+    "eps": 1e-8,
+    "scheduler": null,
+    "sampler": {"identities_per_batch": 32, "max_unique_pairs_per_identity": 4},
+    "negatives_per_anchor_per_direction": 16,
+    "negative_rule": "different identity, same source, uniformly without replacement; use all if fewer than 16",
+    "positive_rule": "original row face/audio pair only",
+    "loss": "2*(weighted face-anchor hinge mean + weighted voice-anchor hinge mean)",
+    "margin": 0.2,
+    "anchor_weight": "all-batch different-identity count, normalized across anchors with legal within-source negatives",
+    "amp": false,
+    "tf32": false,
+    "identity_cross_entropy": false,
+    "gender_reweighting": false,
+    "BN": "native complete-English-training running mean and variance; no recalibration"
+  },
+  "deployment": {
+    "no_gender": "float64 L2 of native eval output; raw own branch space",
+    "gender": "three stored own-space INLP directions, sequential removal and L2",
+    "inlp_fit_identities": 198,
+    "inlp_fit_language": "strict competition English rows only",
+    "distance": "sqrt(max(2-2*clip(dot,-1,1),0))"
+  },
+  "config_role": "Recorded immutable production recipe; the original training body is executed by scripts/train_triplet.py rather than generated from this JSON."
+}

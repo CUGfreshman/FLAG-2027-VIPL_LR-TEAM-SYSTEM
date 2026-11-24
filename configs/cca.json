@@ -1,0 +1,28 @@
+{
+  "rank": 192,
+  "ridge_multiplier": 10.0,
+  "ridge_definition": "10 * trace(population_between_identity_covariance) / input_dimension",
+  "spectrum_weight": "sqrt(canonical_singular_value)",
+  "fit_domain_weights": {"vox": 1.0, "competition_english": 10.0},
+  "fit_identities": {"vox": 5860, "competition_english": 198, "total": 6058},
+  "media_aggregation": "whole_view_L2_then_unique_media_mean_within_identity",
+  "identity_prototype_renormalization": false,
+  "covariance": "weighted between identity means; population denominator sum(identity_weights)",
+  "deployment_center": "strict English198; identity equal then unique-media equal",
+  "gender": {
+    "method": "original shared-face-voice fit3",
+    "depth": 3,
+    "fit_pool": "strict English198 unique media and true training genders",
+    "weighting": "identities equal; unique files within identity equal; modalities half",
+    "classifier": {"penalty": "l2", "C": 1.0, "solver": "lbfgs", "max_iter": 1000, "tol": 1e-8, "fit_intercept": true, "class_weight": null, "random_state": 20261103},
+    "direction_orthogonalization": "two modified Gram-Schmidt passes against preceding active directions",
+    "inference": "initial L2; remove each of three shared directions and L2 after every removal"
+  },
+  "branches": {
+    "facenet_wespeaker": {"checkpoint": "checkpoints/cca/facenet_wespeaker.npz", "face_dimension": 512, "voice_dimension": 256, "output_dimension": 192},
+    "imagebind_wespeaker": {"checkpoint": "checkpoints/cca/imagebind_wespeaker.npz", "face_dimension": 1024, "voice_dimension": 256, "output_dimension": 192},
+    "arcface_wespeaker": {"checkpoint": "checkpoints/cca/arcface_wespeaker.npz", "face_dimension": 512, "voice_dimension": 256, "output_dimension": 192},
+    "dinov2_imagebind_wespeaker": {"checkpoint": "checkpoints/cca/dinov2_imagebind_wespeaker.npz", "face_dimension": 4096, "voice_dimension": 256, "output_dimension": 192, "face_atomic_order": ["face_dino_cls", "face_dino_patch", "face_dino_layer12", "face_imagebind"], "normalization": "each 1024-D atomic block L2, concatenate four blocks, whole-view L2"},
+    "imagebind_whisper13": {"checkpoint": "checkpoints/cca/imagebind_whisper13.npz", "face_dimension": 1024, "voice_dimension": 1280, "output_dimension": 192, "reused_original_pair": "imagebind__whisper13", "historical_id": "C08"}
+  }
+}

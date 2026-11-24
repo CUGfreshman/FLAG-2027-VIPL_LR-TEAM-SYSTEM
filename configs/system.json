@@ -1,0 +1,18 @@
+{
+  "system": "FLAG2027 six-branch 16.25 official displayed average",
+  "head_order": ["triplet", "facenet_wespeaker", "imagebind_wespeaker", "arcface_wespeaker", "dinov2_imagebind_wespeaker", "imagebind_whisper13"],
+  "fusion": "linear_mean",
+  "weights": [0.16666666666666666, 0.16666666666666666, 0.16666666666666666, 0.16666666666666666, 0.16666666666666666, 0.16666666666666666],
+  "no_gender": "raw",
+  "gender": "each branch own English198 INLP3",
+  "triplet_checkpoint": "checkpoints/triplet/epoch0300.pth",
+  "triplet_inlp": "checkpoints/triplet/inlp198.npz",
+  "triplet_batch_size": 1024,
+  "cca_models": {
+    "facenet_wespeaker": "checkpoints/cca/facenet_wespeaker.npz",
+    "imagebind_wespeaker": "checkpoints/cca/imagebind_wespeaker.npz",
+    "arcface_wespeaker": "checkpoints/cca/arcface_wespeaker.npz",
+    "dinov2_imagebind_wespeaker": "checkpoints/cca/dinov2_imagebind_wespeaker.npz",
+    "imagebind_whisper13": "checkpoints/cca/imagebind_whisper13.npz"
+  }
+}

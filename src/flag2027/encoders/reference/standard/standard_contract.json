@@ -1,0 +1,37 @@
+{
+  "API": "load_encoder(name, config, device).encode_batch(modality, records) -> float32[N,D]",
+  "record_fields": [
+    "unique_index",
+    "canonical_path",
+    "io_path"
+  ],
+  "config_resources": "Release repository root; callers may override public weight paths",
+  "relative_dependencies": {
+    "facenet_package": "vendor/facenet_pytorch/ (include the entire original package and MTCNN data weights)",
+    "facenet_checkpoint": "weights/facenet/20180402-114759-vggface2.pt",
+    "wespeaker_checkpoint": "weights/wespeaker/avg_model",
+    "wespeaker_resnet": "vendor/wespeaker/release__wespeaker__models__resnet.py",
+    "wespeaker_pooling": "vendor/wespeaker/release__wespeaker__models__pooling_layers.py"
+  },
+  "facenet": {
+    "modality": "face",
+    "dimension": 512,
+    "output": "Original classify=False unit embedding; no extra normalization",
+    "preprocessing": "PIL RGB; original MTCNN defaults (largest face,160px,margin0); original fixed image standardization",
+    "no_face": "Only MTCNN crop=None invokes the frozen original official full-source box extract_face160 margin0 plus fixed standardization; no other error fallback",
+    "final_nms_sort": "Original NumPy1.26.4 AVX512 argsort equal-score ordering emulated portably from its bundled Intel x86-simd-sort source; original NMS math and thresholds unchanged"
+  },
+  "wespeaker": {
+    "modality": "voice",
+    "dimension": 256,
+    "output": "Raw original ResNet34 TSTP output[-1], no L2 normalization",
+    "preprocessing": "torchaudio.load(normalize=False);mono integer PCM cast to float without amplitude normalization;resample16k when needed;Kaldi fbank80 25ms10ms dither0;per-bin utterance CMN",
+    "model": "Original release ResNet34(feat_dim=80,embed_dim=256,pooling_func=TSTP,two_emb_layer=False);strict avg_model backbone load,omit projection.weight",
+    "portability_only_change": "Original release resnet pooling import uses an isolated module namespace; network bodies are unchanged"
+  },
+  "runtime": "Frozen eval,requires_grad=False,torch.inference_mode,float32,TF32 disabled;one-file forwards preserve original behavior",
+  "diagnostics": "encoder.last_records contains the latest batch;encoder.audit_records accumulates per-file preprocessing records,FaceNet original_no_face recovery markers,and errors for worker JSON output",
+  "failures": "Raise with encoder,unique_index,canonical_path,io_path;never drop media or substitute zero embeddings",
+  "fitting_or_adaptation": false,
+  "official_cached_features_used": false
+}

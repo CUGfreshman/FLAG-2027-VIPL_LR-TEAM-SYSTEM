@@ -1,0 +1,9 @@
+{
+  "peav": {"weights": "weights/pe-av-base", "visual_resize_route": "source60_float32_round_uint8_bilinear_aa"},
+  "facenet": {"weights": "weights/facenet/20180402-114759-vggface2.pt"},
+  "wespeaker": {"weights": "weights/wespeaker/avg_model"},
+  "imagebind": {"source": "external/imagebind", "weights": "weights/imagebind/imagebind_huge.pth"},
+  "arcface": {"source": "external/insightface/python-package/insightface", "weights": "weights/arcface/buffalo_l"},
+  "dinov2": {"weights": "weights/dinov2-large"},
+  "whisper13": {"weights": "weights/whisper-large-v3-encoder"}
+}

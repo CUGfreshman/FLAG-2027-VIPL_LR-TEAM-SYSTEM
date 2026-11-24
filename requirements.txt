@@ -1,0 +1,5 @@
+# Numerical dependencies for the released scoring and fitting paths.
+# Choose the CPU or CUDA build of PyTorch separately as shown in README.
+numpy==1.26.4
+scipy==1.17.1
+scikit-learn==1.7.2

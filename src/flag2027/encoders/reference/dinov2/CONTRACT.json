@@ -1,0 +1,57 @@
+{
+  "complete": true,
+  "repository": "facebook/dinov2-large",
+  "revision": "47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
+  "frozen_eval": true,
+  "float32": true,
+  "autocast": false,
+  "TF32": false,
+  "preprocessing": "Unmodified repository AutoImageProcessor(use_fast=False): RGB, shortest edge256 bicubic, center224, rescale1/255, ImageNet normalization",
+  "blocks": [
+    "last_hidden_state[:,0] after final LayerNorm",
+    "mean(last_hidden_state[:,1:],tokens) after final LayerNorm",
+    "hidden_states[12][:,0], block12 output before final LayerNorm; hidden_states[0] is embedding"
+  ],
+  "normalization": "L2 each 1024 block separately, then concatenate3072; no total-vector normalization",
+  "intermediate_layer_number": 12,
+  "hidden_states_embedding_index": 0,
+  "output_dimension": 3072,
+  "num_transformer_blocks": 24,
+  "hidden_size": 1024,
+  "attention_implementation": "sdpa",
+  "official_eval_only": true,
+  "official_statistics_used": false,
+  "no_model_parameter_updates": true,
+  "source_manifests": [
+    "media/vox_media.csv",
+    "media/face_unique.csv"
+  ],
+  "input_policy": "Vox exact pre-existing frame_count//2 224px fullRGB frame, competition original image; single view",
+  "processor_config": {
+    "crop_size": {
+      "height": 224,
+      "width": 224
+    },
+    "do_center_crop": true,
+    "do_convert_rgb": true,
+    "do_normalize": true,
+    "do_rescale": true,
+    "do_resize": true,
+    "image_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "image_processor_type": "BitImageProcessor",
+    "image_std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "resample": 3,
+    "rescale_factor": 0.00392156862745098,
+    "size": {
+      "shortest_edge": 256
+    }
+  }
+}
